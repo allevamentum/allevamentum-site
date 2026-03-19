@@ -1,0 +1,11 @@
+{
+  "name": "allevamentum-site",
+  "version": "1.0.0",
+  "description": "ALLEVAMENTUM — Instrument of Elevation",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
