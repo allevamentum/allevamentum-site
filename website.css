@@ -333,26 +333,28 @@ img{display:block;max-width:100%}
 .adv-item:nth-child(3) .adv-num{background:linear-gradient(135deg,var(--accent-warm),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .adv-item:nth-child(4) .adv-num{background:linear-gradient(135deg,var(--accent2),var(--accent-teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 
-/* ---- Scroll Text (fixed emphasis word visibility) ---- */
-.scroll-text-section{padding:clamp(80px,14vh,180px) 0;background:var(--bg2);position:relative}
+/* ---- Scroll Text (Apple-style reveal) ---- */
+.scroll-text-section{padding:clamp(100px,18vh,220px) 0;background:var(--bg2);position:relative}
 .scroll-text-section::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
     background:linear-gradient(90deg,transparent,var(--glass-border),transparent)}
 .scroll-text-section::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
     background:linear-gradient(90deg,transparent,var(--glass-border),transparent)}
-.scroll-text{font-size:clamp(24px,3.5vw,52px);font-weight:700;line-height:1.4;letter-spacing:-1px;max-width:1000px}
+.scroll-text{font-size:clamp(32px,4.8vw,72px);font-weight:700;line-height:1.35;letter-spacing:-0.03em;
+    max-width:1100px;margin:0 auto;text-align:center}
 
-/* Regular words — dim by default, bright when lit */
-.scroll-text .st-word{display:inline-block;color:rgba(240,237,232,0.15);transition:color .4s var(--ios),transform .4s var(--ios)}
-.scroll-text .st-word.lit{color:var(--text);transform:translateY(-1px)}
+/* Regular words — Apple dim-to-bright reveal */
+.scroll-text .st-word{display:inline-block;color:rgba(255,255,255,0.12);
+    transition:color .6s var(--ios),filter .6s var(--ios),transform .5s var(--ios);
+    filter:blur(0px)}
+.scroll-text .st-word.lit{color:#F5F5F7;filter:blur(0px);transform:translateY(0)}
 
-/* Emphasis words (transform, measurable, growth) — gradient when lit, italic serif */
-.scroll-text .st-word.st-em{font-family:var(--serif);font-style:italic;color:rgba(240,237,232,0.22);
-    transition:color .4s var(--ios),transform .4s var(--ios),text-shadow .4s var(--ios)}
+/* Emphasis words (transform, measurable, growth) — Apple gradient highlight */
+.scroll-text .st-word.st-em{font-weight:800;color:rgba(255,255,255,0.16);
+    transition:color .6s var(--ios),filter .6s var(--ios),transform .5s var(--ios)}
 .scroll-text .st-word.st-em.lit{
-    background:linear-gradient(135deg,var(--accent),var(--accent-teal));
+    background:linear-gradient(90deg,#2997FF,#6DD5FA,#2DD4BF);
     -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-    transform:translateY(-2px) scale(1.02);
-    filter:drop-shadow(0 0 20px rgba(79,125,247,0.3))}
+    filter:drop-shadow(0 0 30px rgba(41,151,255,0.25))}
 
 /* ---- Services Grid (3D glass cards) ---- */
 .services-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
@@ -508,7 +510,7 @@ img{display:block;max-width:100%}
     .hero-foot{flex-direction:column;align-items:flex-start;gap:28px}
     .hero-stats{gap:24px}
     .sec-header{flex-direction:column;align-items:flex-start!important;gap:12px}
-    .scroll-text{font-size:clamp(20px,5vw,32px)}
+    .scroll-text{font-size:clamp(24px,6vw,36px);text-align:left}
     .services-grid{gap:14px}
     .process-grid{grid-template-columns:1fr}
     .mb-grid{grid-template-columns:repeat(2,1fr)}
