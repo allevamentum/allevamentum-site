@@ -96,10 +96,10 @@ export default function ScrollText() {
     <div className="scroll-text-section" id="scrollText" ref={containerRef}>
       <div className="container">
         <p className="scroll-text">
-          We build <em>applications</em> that don&apos;t just solve problems —
-          they anticipate them. Intelligent software that{" "}
-          <em>transforms</em> complexity into clarity and turns bold ideas into{" "}
-          <em>unstoppable products</em>.
+          We don&apos;t just build software — we engineer <em>platforms</em> that
+          become the backbone of entire industries. From enterprise AI to
+          global-scale <em>cloud infrastructure</em>, we create technology
+          that turns ambitious visions into <em>market-defining products</em>.
         </p>
       </div>
     </div>

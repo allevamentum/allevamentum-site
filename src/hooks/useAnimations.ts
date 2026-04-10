@@ -3,34 +3,47 @@ import { useEffect } from "react";
 
 export function useAnimations() {
   useEffect(() => {
-    const els = document.querySelectorAll("[data-anim]");
-    if (!els.length) return;
+    // Small delay to ensure DOM is fully painted
+    const initTimer = setTimeout(() => {
+      const els = document.querySelectorAll("[data-anim]");
+      if (!els.length) return;
 
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const el = entry.target as HTMLElement;
-            const delay = parseFloat(el.dataset.delay || "0");
-            const parent = el.parentElement;
-            const sibs = parent
-              ? parent.querySelectorAll(":scope > [data-anim]")
-              : [];
-            let idx = 0;
-            sibs.forEach((s, i) => {
-              if (s === el) idx = i;
-            });
-            const totalDelay = delay ? delay * 200 : idx * 120;
-            setTimeout(() => el.classList.add("in"), totalDelay);
-            obs.unobserve(el);
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const el = entry.target as HTMLElement;
+              const delay = parseFloat(el.dataset.delay || "0");
+              const parent = el.parentElement;
+              const sibs = parent
+                ? parent.querySelectorAll(":scope > [data-anim]")
+                : [];
+              let idx = 0;
+              sibs.forEach((s, i) => {
+                if (s === el) idx = i;
+              });
+              const totalDelay = delay ? delay * 200 : idx * 120;
+              setTimeout(() => el.classList.add("in"), totalDelay);
+              obs.unobserve(el);
+            }
+          });
+        },
+        { threshold: 0.02, rootMargin: "50px 0px -10px 0px" }
+      );
+
+      els.forEach((el) => obs.observe(el));
+
+      // Fallback: force-reveal any elements still hidden after 5s
+      setTimeout(() => {
+        els.forEach((el) => {
+          if (!el.classList.contains("in")) {
+            el.classList.add("in");
           }
         });
-      },
-      { threshold: 0.05, rootMargin: "0px 0px -30px 0px" }
-    );
+      }, 5000);
+    }, 100);
 
-    els.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
+    return () => clearTimeout(initTimer);
   }, []);
 }
 
@@ -48,7 +61,7 @@ export function useCounters() {
           }
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.3 }
     );
     nums.forEach((el) => obs.observe(el));
 
@@ -70,18 +83,12 @@ export function useCounters() {
 
 export function useGlowCards() {
   useEffect(() => {
-    if (window.innerWidth < 769) return;
+    if (typeof window === "undefined" || window.innerWidth < 769) return;
     const handler = (e: MouseEvent) => {
       document.querySelectorAll("[data-glow]").forEach((card) => {
         const r = (card as HTMLElement).getBoundingClientRect();
-        (card as HTMLElement).style.setProperty(
-          "--glow-x",
-          e.clientX - r.left + "px"
-        );
-        (card as HTMLElement).style.setProperty(
-          "--glow-y",
-          e.clientY - r.top + "px"
-        );
+        (card as HTMLElement).style.setProperty("--glow-x", e.clientX - r.left + "px");
+        (card as HTMLElement).style.setProperty("--glow-y", e.clientY - r.top + "px");
       });
     };
     document.addEventListener("mousemove", handler);
@@ -91,9 +98,8 @@ export function useGlowCards() {
 
 export function useTilt() {
   useEffect(() => {
-    if (window.innerWidth < 769) return;
+    if (typeof window === "undefined" || window.innerWidth < 769) return;
     const cards = document.querySelectorAll("[data-tilt]");
-
     const handlers = new Map<Element, { move: (e: MouseEvent) => void; leave: () => void }>();
 
     cards.forEach((card) => {
@@ -105,8 +111,7 @@ export function useTilt() {
         el.style.transform = `perspective(900px) rotateX(${y * -5}deg) rotateY(${x * 5}deg) translateY(-10px) scale(1.015)`;
       };
       const leave = () => {
-        el.style.transform =
-          "perspective(900px) rotateX(0) rotateY(0) translateY(0) scale(1)";
+        el.style.transform = "perspective(900px) rotateX(0) rotateY(0) translateY(0) scale(1)";
       };
       el.addEventListener("mousemove", move);
       el.addEventListener("mouseleave", leave);
@@ -124,7 +129,7 @@ export function useTilt() {
 
 export function useDepthCards() {
   useEffect(() => {
-    if (window.innerWidth < 769) return;
+    if (typeof window === "undefined" || window.innerWidth < 769) return;
     const cards = document.querySelectorAll("[data-depth]");
     const handlers = new Map<Element, { move: (e: MouseEvent) => void; leave: (e: MouseEvent) => void }>();
 
@@ -134,18 +139,14 @@ export function useDepthCards() {
         const r = el.getBoundingClientRect();
         const x = (e.clientX - r.left) / r.width - 0.5;
         const y = (e.clientY - r.top) / r.height - 0.5;
-        const inner = el.querySelector(
-          ".adv-inner,.proc-inner,.tc-inner"
-        ) as HTMLElement;
+        const inner = el.querySelector(".adv-inner,.proc-inner,.tc-inner") as HTMLElement;
         if (inner) {
           inner.style.transform = `translate3d(${x * 8}px, ${y * 8}px, 20px)`;
           inner.style.transition = "transform 0.3s ease-out";
         }
       };
       const leave = (e: MouseEvent) => {
-        const inner = (e.currentTarget as HTMLElement).querySelector(
-          ".adv-inner,.proc-inner,.tc-inner"
-        ) as HTMLElement;
+        const inner = (e.currentTarget as HTMLElement).querySelector(".adv-inner,.proc-inner,.tc-inner") as HTMLElement;
         if (inner) inner.style.transform = "translate3d(0,0,0)";
       };
       el.addEventListener("mousemove", move);
@@ -164,7 +165,7 @@ export function useDepthCards() {
 
 export function useMagnetic() {
   useEffect(() => {
-    if (window.innerWidth < 769) return;
+    if (typeof window === "undefined" || window.innerWidth < 769) return;
     const els = document.querySelectorAll("[data-magnetic]");
     const handlers = new Map<Element, { move: (e: MouseEvent) => void; leave: () => void }>();
 
@@ -178,8 +179,7 @@ export function useMagnetic() {
       };
       const leave = () => {
         htmlEl.style.transform = "translate(0, 0)";
-        htmlEl.style.transition =
-          "transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+        htmlEl.style.transition = "transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
         setTimeout(() => (htmlEl.style.transition = ""), 500);
       };
       htmlEl.addEventListener("mousemove", move);
@@ -198,10 +198,8 @@ export function useMagnetic() {
 
 export function useTextScramble() {
   useEffect(() => {
-    const chars =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&";
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&";
     const links = document.querySelectorAll(".nav-link, .ft-col a");
-
     const handlers = new Map<Element, (e: Event) => void>();
 
     links.forEach((link) => {

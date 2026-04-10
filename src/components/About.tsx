@@ -1,8 +1,8 @@
 const advantages = [
-  { num: "01", title: "Product Thinking", desc: "Every application we build solves a real problem. We think in outcomes, not features." },
-  { num: "02", title: "End-to-End Engineering", desc: "From system architecture to App Store submission. One team, full ownership, zero friction." },
-  { num: "03", title: "Bleeding-Edge Tech", desc: "AI, real-time systems, edge computing. We use emerging technology when it creates real advantage." },
-  { num: "04", title: "Built to Scale", desc: "Cloud-native architecture from day one. Your application handles 100 users or 10 million — seamlessly." },
+  { num: "01", title: "Enterprise-Grade Architecture", desc: "Systems engineered for Fortune 500 reliability. Microservices, event-driven design, and zero-downtime deployments from day one." },
+  { num: "02", title: "Full-Stack Ownership", desc: "From infrastructure to pixel-perfect interfaces. One team owns the entire stack — backend, frontend, mobile, cloud, and DevOps." },
+  { num: "03", title: "AI & Emerging Technology", desc: "Large language models, computer vision, predictive analytics. We integrate AI where it creates measurable competitive advantage." },
+  { num: "04", title: "Infinite Scalability", desc: "Cloud-native architecture that handles 100 users or 100 million. Auto-scaling, global CDN, and 99.99% uptime SLA." },
 ];
 
 export default function About() {
@@ -13,12 +13,13 @@ export default function About() {
           <div className="about-left">
             <span className="label" data-anim="blur">Who We Are</span>
             <h2 className="heading-lg" data-anim="blur">
-              We engineer the<br />applications of <em>tomorrow</em>
+              We build the platforms<br />that power <em>industries</em>
             </h2>
             <p className="about-lead" data-anim="fade">
-              Allevamentum is a product studio that creates intelligent,
-              high-performance applications. We combine deep engineering with
-              bold design to build software that redefines industries.
+              Allevamentum is a premium software engineering company. We create
+              enterprise applications, AI-powered platforms, and digital
+              infrastructure that operates at global scale. Our ambition is to
+              build technology that defines the next era of business.
             </p>
           </div>
           <div className="about-right" data-anim="fade">

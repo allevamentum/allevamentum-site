@@ -178,7 +178,7 @@
 }
 
 /* ---- Background Canvas ---- */
-.bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: 0.4; }
+.bg-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: 0.6; }
 
 /* ---- Grain ---- */
 .grain {
@@ -210,10 +210,12 @@
 .t3 { fill: url(#logoGrad); stroke: none; opacity: 0; animation: fillTri .5s .9s var(--av-ease2) forwards; }
 @keyframes drawTri { to { stroke-dashoffset: 0; } }
 @keyframes fillTri { to { opacity: 1; } }
-.loader-name { font-size: 11px; font-weight: 600; letter-spacing: 8px; color: var(--av-text2); overflow: hidden; white-space: nowrap; width: 0; animation: typeName 1s 1s steps(13,end) forwards; }
-@keyframes typeName { to { width: 13ch; } }
-.loader-line { width: 120px; height: 1px; background: rgba(255,255,255,.04); border-radius: 1px; overflow: hidden; }
-.loader-fill { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--av-accent), var(--av-accent2)); animation: loaderFill 1.4s .4s var(--av-ease2) forwards; }
+.loader-name { font-size: 14px; font-weight: 700; letter-spacing: 10px; color: var(--av-text); overflow: hidden; white-space: nowrap; width: 0; animation: typeName 1.2s 1s steps(12,end) forwards; }
+@keyframes typeName { to { width: 12ch; } }
+.loader-tagline { font-size: 11px; font-weight: 400; letter-spacing: 4px; color: var(--av-text3); opacity: 0; font-style: italic; animation: fadeTagline 0.8s 2s var(--av-ease2) forwards; }
+@keyframes fadeTagline { to { opacity: 1; } }
+.loader-line { width: 160px; height: 1px; background: rgba(255,255,255,.04); border-radius: 1px; overflow: hidden; }
+.loader-fill { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--av-accent), var(--av-accent2)); animation: loaderFill 1.8s .4s var(--av-ease2) forwards; }
 @keyframes loaderFill { to { width: 100%; } }
 
 /* ---- Nav ---- */
@@ -311,6 +313,26 @@
 .hero-fade { position: absolute; bottom: 0; left: 0; right: 0; height: 40%;
   background: linear-gradient(to top, var(--av-bg), transparent); z-index: 1; pointer-events: none; }
 .hero-content { position: relative; z-index: 2; }
+
+/* Hero Reveal Animations (triggered by JS state, not IntersectionObserver) */
+.hero-anim { opacity: 0; transform: translateY(40px); filter: blur(8px); }
+.hero-revealed .hero-anim { opacity: 1; transform: translateY(0); filter: blur(0);
+  transition: opacity 1.2s var(--av-ios), transform 1.2s var(--av-ios), filter 1.2s var(--av-ios); }
+.hero-revealed .hero-anim-1 { transition-delay: 0s; }
+.hero-revealed .hero-anim-2 { transition-delay: 0.15s; opacity: 0; transform: translateY(0);
+  clip-path: inset(0 100% 0 0); filter: none; }
+.hero-revealed .hero-anim-2 { opacity: 1; clip-path: inset(0 0% 0 0);
+  transition: opacity 1s var(--av-ios), clip-path 1.2s var(--av-ios); transition-delay: 0.2s; }
+.hero-revealed .hero-anim-3 { transition-delay: 0.15s; opacity: 0; transform: translateY(0);
+  clip-path: inset(0 100% 0 0); filter: none; }
+.hero-revealed .hero-anim-3 { opacity: 1; clip-path: inset(0 0% 0 0);
+  transition: opacity 1s var(--av-ios), clip-path 1.2s var(--av-ios); transition-delay: 0.4s; }
+.hero-revealed .hero-anim-4 { transition-delay: 0.15s; opacity: 0; transform: translateY(0);
+  clip-path: inset(0 100% 0 0); filter: none; }
+.hero-revealed .hero-anim-4 { opacity: 1; clip-path: inset(0 0% 0 0);
+  transition: opacity 1s var(--av-ios), clip-path 1.2s var(--av-ios); transition-delay: 0.6s; }
+.hero-revealed .hero-anim-5 { transition-delay: 0.9s; }
+.hero-revealed .hero-anim-6 { transition-delay: 1.3s; }
 
 /* Hero Badge */
 .hero-badge { display: inline-flex; align-items: center; gap: 10px; font-size: 11px; font-weight: 500; letter-spacing: 4px; text-transform: uppercase; color: var(--av-text2);
