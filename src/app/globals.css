@@ -210,8 +210,8 @@
 .t3 { fill: url(#logoGrad); stroke: none; opacity: 0; animation: fillTri .5s .9s var(--av-ease2) forwards; }
 @keyframes drawTri { to { stroke-dashoffset: 0; } }
 @keyframes fillTri { to { opacity: 1; } }
-.loader-name { font-size: 14px; font-weight: 700; letter-spacing: 10px; color: var(--av-text); overflow: hidden; white-space: nowrap; width: 0; animation: typeName 1.2s 1s steps(12,end) forwards; }
-@keyframes typeName { to { width: 12ch; } }
+.loader-name { font-size: 14px; font-weight: 700; letter-spacing: 10px; color: var(--av-text); overflow: hidden; white-space: nowrap; max-width: 0; animation: typeName 1.2s 1s steps(12,end) forwards; }
+@keyframes typeName { to { max-width: 300px; } }
 .loader-tagline { font-size: 11px; font-weight: 400; letter-spacing: 4px; color: var(--av-text3); opacity: 0; font-style: italic; animation: fadeTagline 0.8s 2s var(--av-ease2) forwards; }
 @keyframes fadeTagline { to { opacity: 1; } }
 .loader-line { width: 160px; height: 1px; background: rgba(255,255,255,.04); border-radius: 1px; overflow: hidden; }
