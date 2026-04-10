@@ -15,60 +15,59 @@ export default function BackgroundCanvas() {
 
     function resize() {
       w = canvas!.width = window.innerWidth;
-      h = canvas!.height = document.documentElement.scrollHeight || window.innerHeight;
+      h = canvas!.height = window.innerHeight;
     }
     resize();
     window.addEventListener("resize", resize);
 
     document.addEventListener("mousemove", (e) => {
       mouse.x = e.clientX;
-      mouse.y = e.clientY + window.scrollY;
+      mouse.y = e.clientY;
     });
 
     // --- FinTech Grid ---
     const gridSpacing = 80;
     const gridAlpha = 0.025;
 
-    // --- Network Nodes ---
+    // --- Network Nodes (viewport-relative) ---
     interface Node {
       x: number; y: number; vx: number; vy: number;
       size: number; color: number[]; alpha: number;
       baseAlpha: number; phase: number; type: string;
-      pulseSpeed: number; connections: number[];
+      pulseSpeed: number;
     }
 
     const colors = [
-      [79, 125, 247],   // blue
-      [139, 108, 247],  // purple
-      [45, 212, 191],   // teal
-      [245, 166, 35],   // gold
-      [100, 180, 255],  // light blue
+      [79, 125, 247],
+      [139, 108, 247],
+      [45, 212, 191],
+      [245, 166, 35],
+      [100, 180, 255],
     ];
 
-    const nodeCount = 80;
+    const nodeCount = 60;
     const nodes: Node[] = [];
-    const connectionDist = 200;
+    const connectionDist = 180;
 
     for (let i = 0; i < nodeCount; i++) {
       const color = colors[Math.floor(Math.random() * colors.length)];
       const isLarge = Math.random() < 0.15;
       nodes.push({
         x: Math.random() * w,
-        y: Math.random() * (h || 5000),
+        y: Math.random() * h,
         vx: (Math.random() - 0.5) * 0.3,
         vy: (Math.random() - 0.5) * 0.2,
         size: isLarge ? 2.5 + Math.random() * 2 : 1 + Math.random() * 1.5,
         color,
         alpha: 0,
-        baseAlpha: isLarge ? 0.12 + Math.random() * 0.08 : 0.04 + Math.random() * 0.06,
+        baseAlpha: isLarge ? 0.1 + Math.random() * 0.08 : 0.03 + Math.random() * 0.05,
         phase: Math.random() * Math.PI * 2,
         type: Math.random() < 0.2 ? "diamond" : Math.random() < 0.3 ? "triangle" : "circle",
         pulseSpeed: 0.5 + Math.random() * 1.5,
-        connections: [],
       });
     }
 
-    // --- Data Streams (vertical flowing lines) ---
+    // --- Data Streams ---
     interface DataStream {
       x: number; speed: number; length: number;
       y: number; color: number[]; alpha: number; width: number;
@@ -77,7 +76,7 @@ export default function BackgroundCanvas() {
     for (let i = 0; i < 12; i++) {
       streams.push({
         x: Math.random() * w,
-        y: Math.random() * -2000,
+        y: Math.random() * h * -1,
         speed: 0.5 + Math.random() * 1.5,
         length: 100 + Math.random() * 300,
         color: colors[Math.floor(Math.random() * colors.length)],
@@ -86,17 +85,17 @@ export default function BackgroundCanvas() {
       });
     }
 
-    // --- Floating Hex/Data blocks ---
+    // --- Floating Hexagons ---
     interface HexBlock {
       x: number; y: number; size: number;
       rotation: number; rotSpeed: number;
       alpha: number; color: number[]; phase: number;
     }
     const hexBlocks: HexBlock[] = [];
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 12; i++) {
       hexBlocks.push({
         x: Math.random() * w,
-        y: Math.random() * (h || 5000),
+        y: Math.random() * h,
         size: 15 + Math.random() * 30,
         rotation: Math.random() * Math.PI * 2,
         rotSpeed: (Math.random() - 0.5) * 0.002,
@@ -109,23 +108,15 @@ export default function BackgroundCanvas() {
     let time = 0;
 
     function drawGrid() {
-      const scrollY = window.scrollY;
-      const viewTop = scrollY;
-      const viewBottom = scrollY + window.innerHeight;
-
-      // Vertical lines
       for (let x = 0; x < w; x += gridSpacing) {
         ctx.beginPath();
-        ctx.moveTo(x, viewTop);
-        ctx.lineTo(x, viewBottom);
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, h);
         ctx.strokeStyle = `rgba(79, 125, 247, ${gridAlpha})`;
         ctx.lineWidth = 0.3;
         ctx.stroke();
       }
-
-      // Horizontal lines
-      const startY = Math.floor(viewTop / gridSpacing) * gridSpacing;
-      for (let y = startY; y < viewBottom; y += gridSpacing) {
+      for (let y = 0; y < h; y += gridSpacing) {
         ctx.beginPath();
         ctx.moveTo(0, y);
         ctx.lineTo(w, y);
@@ -134,9 +125,9 @@ export default function BackgroundCanvas() {
         ctx.stroke();
       }
 
-      // Grid intersection pulses near mouse
+      // Grid pulses near mouse
       for (let x = 0; x < w; x += gridSpacing) {
-        for (let y = startY; y < viewBottom; y += gridSpacing) {
+        for (let y = 0; y < h; y += gridSpacing) {
           const dx = x - mouse.x;
           const dy = y - mouse.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
@@ -153,23 +144,14 @@ export default function BackgroundCanvas() {
     }
 
     function drawNodes() {
-      const scrollY = window.scrollY;
-      const viewTop = scrollY - 100;
-      const viewBottom = scrollY + window.innerHeight + 100;
-
-      // Update and draw connections
+      // Connections
       for (let i = 0; i < nodes.length; i++) {
         const a = nodes[i];
-        if (a.y < viewTop || a.y > viewBottom) continue;
-
         for (let j = i + 1; j < nodes.length; j++) {
           const b = nodes[j];
-          if (b.y < viewTop || b.y > viewBottom) continue;
-
           const dx = a.x - b.x;
           const dy = a.y - b.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-
           if (dist < connectionDist) {
             const alpha = (1 - dist / connectionDist) * 0.06;
             ctx.beginPath();
@@ -179,7 +161,7 @@ export default function BackgroundCanvas() {
             ctx.lineWidth = 0.4;
             ctx.stroke();
 
-            // Data pulse traveling along connections
+            // Data pulse
             const pulsePos = (time * 0.5 + i * 0.1) % 1;
             const px = a.x + (b.x - a.x) * pulsePos;
             const py = a.y + (b.y - a.y) * pulsePos;
@@ -191,30 +173,27 @@ export default function BackgroundCanvas() {
         }
       }
 
-      // Draw nodes
+      // Nodes
       for (const node of nodes) {
         node.x += node.vx + Math.sin(time + node.phase) * 0.15;
         node.y += node.vy + Math.cos(time * 0.7 + node.phase) * 0.1;
 
         if (node.x < -20) node.x = w + 20;
         if (node.x > w + 20) node.x = -20;
-        if (node.y < -20) node.y = (h || 5000) + 20;
-        if (node.y > (h || 5000) + 20) node.y = -20;
+        if (node.y < -20) node.y = h + 20;
+        if (node.y > h + 20) node.y = -20;
 
-        if (node.y < viewTop || node.y > viewBottom) continue;
-
-        // Pulse
         const pulse = 0.7 + 0.3 * Math.sin(time * node.pulseSpeed + node.phase);
         node.alpha = node.baseAlpha * pulse;
 
-        // Mouse proximity boost
         const dx = node.x - mouse.x;
         const dy = node.y - mouse.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
+        let sizeBoost = 0;
         if (dist < 250) {
           const proximity = 1 - dist / 250;
           node.alpha += proximity * 0.2;
-          node.size += proximity * 1.5;
+          sizeBoost = proximity * 1.5;
         }
 
         const c = node.color;
@@ -222,8 +201,10 @@ export default function BackgroundCanvas() {
         ctx.translate(node.x, node.y);
         ctx.globalAlpha = node.alpha;
 
+        const drawSize = node.size + sizeBoost;
+
         if (node.type === "diamond") {
-          const s = node.size * 1.5;
+          const s = drawSize * 1.5;
           ctx.rotate(Math.PI / 4);
           ctx.beginPath();
           ctx.rect(-s / 2, -s / 2, s, s);
@@ -231,7 +212,7 @@ export default function BackgroundCanvas() {
           ctx.lineWidth = 0.6;
           ctx.stroke();
         } else if (node.type === "triangle") {
-          const s = node.size * 1.5;
+          const s = drawSize * 1.5;
           ctx.beginPath();
           ctx.moveTo(0, -s);
           ctx.lineTo(s * 0.87, s * 0.5);
@@ -242,33 +223,25 @@ export default function BackgroundCanvas() {
           ctx.stroke();
         } else {
           ctx.beginPath();
-          ctx.arc(0, 0, node.size, 0, Math.PI * 2);
+          ctx.arc(0, 0, drawSize, 0, Math.PI * 2);
           ctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${node.alpha})`;
           ctx.fill();
-          // Glow ring
-          if (node.size > 2) {
+          if (drawSize > 2.5) {
             ctx.beginPath();
-            ctx.arc(0, 0, node.size * 3, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${node.alpha * 0.15})`;
+            ctx.arc(0, 0, drawSize * 3, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${node.alpha * 0.12})`;
             ctx.fill();
           }
         }
         ctx.restore();
-
-        // Reset boosted size
-        if (dist < 250) {
-          const proximity = 1 - dist / 250;
-          node.size -= proximity * 1.5;
-        }
       }
     }
 
     function drawStreams() {
-      const scrollY = window.scrollY;
       for (const stream of streams) {
         stream.y += stream.speed;
-        if (stream.y - stream.length > h + scrollY) {
-          stream.y = scrollY - stream.length;
+        if (stream.y - stream.length > h) {
+          stream.y = -stream.length;
           stream.x = Math.random() * w;
         }
 
@@ -288,15 +261,16 @@ export default function BackgroundCanvas() {
     }
 
     function drawHexBlocks() {
-      const scrollY = window.scrollY;
-      const viewTop = scrollY - 100;
-      const viewBottom = scrollY + window.innerHeight + 100;
-
       for (const hex of hexBlocks) {
         hex.rotation += hex.rotSpeed;
         const floatY = Math.sin(time * 0.3 + hex.phase) * 10;
+        hex.x += Math.sin(time * 0.1 + hex.phase) * 0.2;
+        hex.y += Math.cos(time * 0.08 + hex.phase) * 0.15;
 
-        if (hex.y + floatY < viewTop || hex.y + floatY > viewBottom) continue;
+        if (hex.x < -50) hex.x = w + 50;
+        if (hex.x > w + 50) hex.x = -50;
+        if (hex.y < -50) hex.y = h + 50;
+        if (hex.y > h + 50) hex.y = -50;
 
         const c = hex.color;
         ctx.save();
@@ -304,7 +278,6 @@ export default function BackgroundCanvas() {
         ctx.rotate(hex.rotation);
         ctx.globalAlpha = hex.alpha;
 
-        // Draw hexagon
         const s = hex.size;
         ctx.beginPath();
         for (let i = 0; i < 6; i++) {
@@ -318,27 +291,17 @@ export default function BackgroundCanvas() {
         ctx.strokeStyle = `rgb(${c[0]},${c[1]},${c[2]})`;
         ctx.lineWidth = 0.5;
         ctx.stroke();
-
         ctx.restore();
       }
     }
 
     function draw() {
-      // Resize canvas to full document height
-      const docHeight = document.documentElement.scrollHeight;
-      if (canvas!.height !== docHeight) {
-        canvas!.height = docHeight;
-        h = docHeight;
-      }
-
       ctx.clearRect(0, 0, w, h);
       time += 0.008;
-
       drawGrid();
       drawStreams();
       drawHexBlocks();
       drawNodes();
-
       rafId = requestAnimationFrame(draw);
     }
     draw();

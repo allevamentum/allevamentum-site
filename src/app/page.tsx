@@ -21,26 +21,24 @@ export default function Home() {
       <Preloader />
       <ScrollProgress />
       <CustomCursor />
+      <BackgroundCanvas />
       <Navbar />
 
-      <div style={{ position: "relative" }}>
-        <BackgroundCanvas />
-        <main style={{ position: "relative", zIndex: 1 }}>
-          <Hero />
-          <Marquee />
-          <div className="sec-divider" data-anim="line" />
-          <About />
-          <ScrollText />
-          <div className="sec-divider" data-anim="line" />
-          <Services />
-          <Metrics />
-          <Process />
-          <div className="sec-divider" data-anim="line" />
-          <Tech />
-          <Contact />
-          <Footer />
-        </main>
-      </div>
+      <main style={{ position: "relative", zIndex: 1 }}>
+        <Hero />
+        <Marquee />
+        <div className="sec-divider" data-anim="line" />
+        <About />
+        <ScrollText />
+        <div className="sec-divider" data-anim="line" />
+        <Services />
+        <Metrics />
+        <Process />
+        <div className="sec-divider" data-anim="line" />
+        <Tech />
+        <Contact />
+        <Footer />
+      </main>
 
       <ClientEffects />
     </>
