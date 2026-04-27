@@ -2,6 +2,7 @@ import Preloader from "@/components/Preloader";
 import CustomCursor from "@/components/CustomCursor";
 import ScrollProgress from "@/components/ScrollProgress";
 import BackgroundCanvas from "@/components/BackgroundCanvas";
+import SmoothScroll from "@/components/SmoothScroll";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
@@ -19,6 +20,7 @@ export default function Home() {
   return (
     <>
       <Preloader />
+      <SmoothScroll />
       <ScrollProgress />
       <CustomCursor />
       <BackgroundCanvas />
