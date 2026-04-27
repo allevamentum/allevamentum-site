@@ -763,3 +763,99 @@ html.lenis body { height: auto; }
   .glass-card { transition: none !important; }
   .ios-btn-primary, .ios-btn-glass { transition: none !important; }
 }
+
+/* ============================================================
+   Type polish — kill italics, embrace bold + multi-stop accents
+   Each section's <em> draws from a different slice of the brand
+   palette so the whole page feels chromatically alive without
+   leaning on italic styling.
+   ============================================================ */
+
+/* Defaults: solid weight, gradient stays */
+.heading-lg em,
+.heading-xxl em {
+  font-style: normal !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.01em;
+  background: linear-gradient(135deg, var(--av-accent) 0%, var(--av-accent2) 50%, var(--av-accent-rose) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  /* subtle bloom mirroring the gradient */
+  filter: drop-shadow(0 0 26px rgba(139, 108, 247, 0.18));
+}
+
+/* Section-scoped accent palettes */
+#about .heading-lg em {
+  background: linear-gradient(135deg, var(--av-accent) 0%, var(--av-accent2) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 24px rgba(79, 125, 247, 0.22));
+}
+
+#services .heading-lg em {
+  background: linear-gradient(135deg, var(--av-accent2) 0%, var(--av-accent-rose) 60%, var(--av-accent-warm) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 24px rgba(244, 114, 182, 0.22));
+}
+
+#process .heading-lg em {
+  background: linear-gradient(135deg, var(--av-accent) 0%, var(--av-accent-teal) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 24px rgba(45, 212, 191, 0.22));
+}
+
+#tech .heading-lg em {
+  background: linear-gradient(135deg, var(--av-accent-teal) 0%, var(--av-accent) 50%, var(--av-accent2) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 24px rgba(45, 212, 191, 0.22));
+}
+
+#contact .heading-xxl em {
+  background: linear-gradient(135deg, var(--av-accent-warm) 0%, var(--av-accent-rose) 50%, var(--av-accent2) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 26px rgba(245, 166, 35, 0.22));
+}
+
+/* Footer & preloader: kill italic, keep visual weight */
+.loader-tagline {
+  font-style: normal !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.4em;
+}
+.ft-tag,
+.ft-latin {
+  font-style: normal !important;
+}
+
+/* Optional: micro chromatic-aberration shimmer on hover for emphasis words.
+   Subtle — only on devices that hover. Spread the gradient slightly. */
+@media (hover: hover) {
+  .heading-lg em,
+  .heading-xxl em {
+    background-size: 220% 100%;
+    background-position: 0% 50%;
+    transition: background-position 1.4s var(--av-ios), filter 0.6s ease;
+  }
+  .heading-lg:hover em,
+  .heading-xxl:hover em {
+    background-position: 100% 50%;
+    filter: drop-shadow(0 0 32px rgba(139, 108, 247, 0.32));
+  }
+}
+
+/* Section-varied label eyebrows — match each heading's accent palette */
+#about .label { background: linear-gradient(135deg, var(--av-accent), var(--av-accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+#services .label { background: linear-gradient(135deg, var(--av-accent2), var(--av-accent-rose)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+#process .label { background: linear-gradient(135deg, var(--av-accent), var(--av-accent-teal)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+#tech .label { background: linear-gradient(135deg, var(--av-accent-teal), var(--av-accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+#contact .label { background: linear-gradient(135deg, var(--av-accent-warm), var(--av-accent-rose)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
