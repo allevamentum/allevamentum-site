@@ -6,10 +6,10 @@ import SmoothScroll from "@/components/SmoothScroll";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
-import About from "@/components/About";
+import EngineeringSection from "@/components/EngineeringSection";
 import ScrollText from "@/components/ScrollText";
-import Services from "@/components/Services";
-import Metrics from "@/components/Metrics";
+import IndustriesSection from "@/components/IndustriesSection";
+import BenefitsSection from "@/components/BenefitsSection";
 import Process from "@/components/Process";
 import Tech from "@/components/Tech";
 import Contact from "@/components/Contact";
@@ -29,12 +29,11 @@ export default function Home() {
       <main style={{ position: "relative", zIndex: 1 }}>
         <Hero />
         <Marquee />
-        <div className="sec-divider" data-anim="line" />
-        <About />
+        <EngineeringSection />
         <ScrollText />
         <div className="sec-divider" data-anim="line" />
-        <Services />
-        <Metrics />
+        <IndustriesSection />
+        <BenefitsSection />
         <Process />
         <div className="sec-divider" data-anim="line" />
         <Tech />
